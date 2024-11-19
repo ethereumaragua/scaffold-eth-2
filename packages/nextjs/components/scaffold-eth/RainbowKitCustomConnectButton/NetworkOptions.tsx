@@ -1,7 +1,9 @@
 import { useTheme } from "next-themes";
 import { useAccount, useSwitchChain } from "wagmi";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
+import { DropdownMenuItem } from "~~/components/ui/dropdown-menu";
 import { getNetworkColor } from "~~/hooks/scaffold-eth";
+import { cn } from "~~/lib/utils";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
@@ -21,16 +23,14 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
       {allowedNetworks
         .filter(allowedNetwork => allowedNetwork.id !== chain?.id)
         .map(allowedNetwork => (
-          <li key={allowedNetwork.id} className={hidden ? "hidden" : ""}>
-            <button
-              className="menu-item btn-sm !rounded-xl flex gap-3 py-3 whitespace-nowrap"
-              type="button"
-              onClick={() => {
-                switchChain?.({ chainId: allowedNetwork.id });
-              }}
-            >
+          <DropdownMenuItem
+            key={allowedNetwork.id}
+            className={cn("p-0", hidden && "hidden")}
+            onClick={() => switchChain?.({ chainId: allowedNetwork.id })}
+          >
+            <div className="flex items-center gap-3 p-3 w-full">
               <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
-              <span>
+              <span className="whitespace-nowrap">
                 Switch to{" "}
                 <span
                   style={{
@@ -40,8 +40,8 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
                   {allowedNetwork.name}
                 </span>
               </span>
-            </button>
-          </li>
+            </div>
+          </DropdownMenuItem>
         ))}
     </>
   );

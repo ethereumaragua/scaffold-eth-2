@@ -1,5 +1,7 @@
 import { ChangeEvent, FocusEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 import { CommonInputProps } from "~~/components/scaffold-eth";
+import { Input } from "~~/components/ui/input";
+import { cn } from "~~/lib/utils";
 
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
@@ -21,12 +23,15 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
 }: InputBaseProps<T>) => {
   const inputReft = useRef<HTMLInputElement>(null);
 
-  let modifier = "";
-  if (error) {
-    modifier = "border-error";
-  } else if (disabled) {
-    modifier = "border-disabled bg-base-300";
-  }
+  const getInputStyles = () => {
+    if (error) {
+      return "border-destructive";
+    }
+    if (disabled) {
+      return "opacity-50 bg-muted";
+    }
+    return "";
+  };
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,22 +40,27 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
     [onChange],
   );
 
-  // Runs only when reFocus prop is passed, useful for setting the cursor
-  // at the end of the input. Example AddressInput
   const onFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
     if (reFocus !== undefined) {
       e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length);
     }
   };
+
   useEffect(() => {
     if (reFocus !== undefined && reFocus === true) inputReft.current?.focus();
   }, [reFocus]);
 
   return (
-    <div className={`flex border-2 border-base-300 bg-base-200 rounded-full text-accent ${modifier}`}>
+    <div className={cn("flex items-center rounded-full border-2", "bg-background text-foreground", getInputStyles())}>
       {prefix}
-      <input
-        className="input input-ghost focus-within:border-transparent focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-gray-400"
+      <Input
+        className={cn(
+          "border-0 bg-transparent",
+          "focus-visible:ring-0 focus-visible:ring-offset-0",
+          "h-[2.2rem] min-h-[2.2rem] w-full px-4",
+          "font-medium text-foreground",
+          "placeholder:text-muted-foreground/50",
+        )}
         placeholder={placeholder}
         name={name}
         value={value?.toString()}

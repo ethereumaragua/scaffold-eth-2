@@ -5,6 +5,8 @@ import { Address, isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { CommonInputProps, InputBase, isENS } from "~~/components/scaffold-eth";
+import { Skeleton } from "~~/components/ui/skeleton";
+import { cn } from "~~/lib/utils";
 
 /**
  * Address input with ENS name resolution
@@ -89,31 +91,24 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       reFocus={reFocus}
       prefix={
         ensName ? (
-          <div className="flex bg-base-300 rounded-l-full items-center">
-            {isEnsAvatarLoading && <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>}
-            {ensAvatar ? (
+          <div className={cn("flex items-center rounded-l-full pl-3", "bg-muted/50")}>
+            {isEnsAvatarLoading && <Skeleton className="h-[35px] w-[35px] rounded-full" />}
+            {ensAvatar && (
               <span className="w-[35px]">
-                {
-                  // eslint-disable-next-line
-                  <img className="w-full rounded-full" src={ensAvatar} alt={`${ensAddress} avatar`} />
-                }
+                <img className="w-full rounded-full" src={ensAvatar} alt={`${ensAddress} avatar`} />
               </span>
-            ) : null}
-            <span className="text-accent px-2">{enteredEnsName ?? ensName}</span>
+            )}
+            <span className="px-2 text-foreground">{enteredEnsName || ensName}</span>
           </div>
         ) : (
-          (isEnsNameLoading || isEnsAddressLoading) && (
-            <div className="flex bg-base-300 rounded-l-full items-center gap-2 pr-2">
-              <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>
-              <div className="skeleton bg-base-200 h-3 w-20"></div>
+          value && (
+            <div className="flex items-center gap-2 pl-3">
+              <span className="w-[25px]">
+                <img className="w-full rounded-full" src={blo(value as `0x${string}`)} alt={`${value} avatar`} />
+              </span>
             </div>
           )
         )
-      }
-      suffix={
-        // Don't want to use nextJS Image here (and adding remote patterns for the URL)
-        // eslint-disable-next-line @next/next/no-img-element
-        value && <img alt="" className="!rounded-full" src={blo(value as `0x${string}`)} width="35" height="35" />
       }
     />
   );

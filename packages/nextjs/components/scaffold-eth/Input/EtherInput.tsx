@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 import { CommonInputProps, InputBase, SIGNED_NUMBER_REGEX } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~~/components/ui/tooltip";
 import { useDisplayUsdMode } from "~~/hooks/scaffold-eth/useDisplayUsdMode";
+import { cn } from "~~/lib/utils";
 import { useGlobalState } from "~~/services/store/store";
 
 const MAX_DECIMALS_USD = 2;
@@ -103,24 +106,30 @@ export const EtherInput = ({
       placeholder={placeholder}
       onChange={handleChangeNumber}
       disabled={disabled}
-      prefix={<span className="pl-4 -mr-2 text-accent self-center">{displayUsdMode ? "$" : "Ξ"}</span>}
+      prefix={<span className="pl-4 -mr-2 text-foreground self-center">{displayUsdMode ? "$" : "Ξ"}</span>}
       suffix={
-        <div
-          className={`${
-            nativeCurrencyPrice > 0
-              ? ""
-              : "tooltip tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-          }`}
-          data-tip={isNativeCurrencyPriceFetching ? "Fetching price" : "Unable to fetch price"}
-        >
-          <button
-            className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
-            onClick={toggleDisplayUsdMode}
-            disabled={!displayUsdMode && !nativeCurrencyPrice}
-          >
-            <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-          </button>
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="pr-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={cn("h-[2.2rem] w-[2.2rem]", !nativeCurrencyPrice && "opacity-50")}
+                  onClick={toggleDisplayUsdMode}
+                  disabled={!displayUsdMode && !nativeCurrencyPrice}
+                >
+                  <ArrowsRightLeftIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </TooltipTrigger>
+            {(!nativeCurrencyPrice || isNativeCurrencyPriceFetching) && (
+              <TooltipContent side="right">
+                <p>{isNativeCurrencyPriceFetching ? "Fetching price" : "Unable to fetch price"}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       }
     />
   );

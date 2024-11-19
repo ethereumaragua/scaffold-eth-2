@@ -7,6 +7,7 @@ import { normalize } from "viem/ens";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { cn } from "~~/lib/utils";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 const textSizeMap = {
@@ -116,7 +117,7 @@ export const Address = ({
     return (
       <div className="flex items-center">
         <div
-          className="flex-shrink-0 skeleton rounded-full"
+          className="flex-shrink-0 animate-pulse rounded-full bg-muted"
           style={{
             width: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
             height: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
@@ -124,11 +125,11 @@ export const Address = ({
         ></div>
         <div className="flex flex-col space-y-1">
           {!onlyEnsOrAddress && (
-            <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
+            <div className={cn("ml-1.5 animate-pulse rounded-lg font-bold bg-muted", textSizeMap[ensSize])}>
               <span className="invisible">0x1234...56789</span>
             </div>
           )}
-          <div className={`ml-1.5 skeleton rounded-lg ${textSizeMap[addressSize]}`}>
+          <div className={cn("ml-1.5 animate-pulse rounded-lg bg-muted", textSizeMap[addressSize])}>
             <span className="invisible">0x1234...56789</span>
           </div>
         </div>
@@ -137,7 +138,7 @@ export const Address = ({
   }
 
   if (!isAddress(checkSumAddress)) {
-    return <span className="text-error">Wrong address</span>;
+    return <span className="text-destructive">Wrong address</span>;
   }
 
   const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
@@ -154,11 +155,11 @@ export const Address = ({
       <div className="flex flex-col">
         {showSkeleton &&
           (isEnsNameLoading ? (
-            <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
+            <div className={cn("ml-1.5 animate-pulse rounded-lg font-bold bg-muted", textSizeMap[ensSize])}>
               <span className="invisible">{shortAddress}</span>
             </div>
           ) : (
-            <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
+            <span className={cn("ml-1.5 font-bold", textSizeMap[ensSize])}>
               <AddressLinkWrapper
                 disableAddressLink={disableAddressLink}
                 blockExplorerAddressLink={blockExplorerAddressLink}
@@ -168,7 +169,7 @@ export const Address = ({
             </span>
           ))}
         <div className="flex">
-          <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
+          <span className={cn("ml-1.5 font-normal", textSizeMap[addressSize])}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}
               blockExplorerAddressLink={blockExplorerAddressLink}
@@ -177,7 +178,7 @@ export const Address = ({
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
-            className={`ml-1 text-sky-600 ${copyIconSizeMap[addressSize]} cursor-pointer`}
+            className={cn("ml-1 text-primary cursor-pointer", copyIconSizeMap[addressSize])}
             address={checkSumAddress}
           />
         </div>

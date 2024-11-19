@@ -1,9 +1,11 @@
 "use client";
 
 import { Address, formatEther } from "viem";
+import { Button } from "~~/components/ui/button";
 import { useDisplayUsdMode } from "~~/hooks/scaffold-eth/useDisplayUsdMode";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
+import { cn } from "~~/lib/utils";
 import { useGlobalState } from "~~/services/store/store";
 
 type BalanceProps = {
@@ -33,9 +35,9 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   if (!address || isLoading || balance === null || (isNativeCurrencyPriceFetching && nativeCurrencyPrice === 0)) {
     return (
       <div className="animate-pulse flex space-x-4">
-        <div className="rounded-md bg-slate-300 h-6 w-6"></div>
+        <div className="rounded-md bg-muted h-6 w-6"></div>
         <div className="flex items-center space-y-6">
-          <div className="h-2 w-28 bg-slate-300 rounded"></div>
+          <div className="h-2 w-28 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -43,8 +45,12 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
 
   if (isError) {
     return (
-      <div className={`border-2 border-gray-400 rounded-md px-2 flex flex-col items-center max-w-fit cursor-pointer`}>
-        <div className="text-warning">Error</div>
+      <div
+        className={cn(
+          "border-2 border-destructive rounded-md px-2 flex flex-col items-center max-w-fit cursor-pointer",
+        )}
+      >
+        <div className="text-destructive">Error</div>
       </div>
     );
   }
@@ -52,8 +58,10 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
   return (
-    <button
-      className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}
+    <Button
+      variant="ghost"
+      size="sm"
+      className={cn("flex flex-col font-normal items-center hover:bg-transparent p-0 h-auto", className)}
       onClick={toggleDisplayUsdMode}
     >
       <div className="w-full flex items-center justify-center">
@@ -69,6 +77,6 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
           </>
         )}
       </div>
-    </button>
+    </Button>
   );
 };

@@ -6,7 +6,9 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { BuidlGuidlLogo } from "~~/components/assets/BuidlGuidlLogo";
 import { Faucet } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/button";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { cn } from "~~/lib/utils";
 import { useGlobalState } from "~~/services/store/store";
 
 /**
@@ -24,30 +26,37 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row gap-2 pointer-events-auto">
             {nativeCurrencyPrice > 0 && (
               <div>
-                <div className="btn btn-primary btn-sm font-normal gap-1 cursor-auto">
-                  <CurrencyDollarIcon className="h-4 w-4" />
+                <Button variant="default" size="sm" className="font-normal cursor-auto">
+                  <CurrencyDollarIcon className="h-4 w-4 mr-1" />
                   <span>{nativeCurrencyPrice.toFixed(2)}</span>
-                </div>
+                </Button>
               </div>
             )}
             {isLocalNetwork && (
               <>
                 <Faucet />
-                <Link href="/blockexplorer" passHref className="btn btn-primary btn-sm font-normal gap-1">
-                  <MagnifyingGlassIcon className="h-4 w-4" />
-                  <span>Block Explorer</span>
-                </Link>
+                <Button variant="default" size="sm" className="font-normal" asChild>
+                  <Link href="/blockexplorer">
+                    <MagnifyingGlassIcon className="h-4 w-4 mr-1" />
+                    <span>Block Explorer</span>
+                  </Link>
+                </Button>
               </>
             )}
           </div>
-          <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
+          <SwitchTheme className={cn("pointer-events-auto", isLocalNetwork && "self-end md:self-auto")} />
         </div>
       </div>
       <div className="w-full">
-        <ul className="menu menu-horizontal w-full">
+        <nav className="w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
-              <a href="https://github.com/scaffold-eth/se-2" target="_blank" rel="noreferrer" className="link">
+              <a
+                href="https://github.com/scaffold-eth/se-2"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary hover:text-primary/80 underline underline-offset-4"
+              >
                 Fork me
               </a>
             </div>
@@ -57,23 +66,28 @@ export const Footer = () => {
                 Built with <HeartIcon className="inline-block h-4 w-4" /> at
               </p>
               <a
-                className="flex justify-center items-center gap-1"
+                className="flex justify-center items-center gap-1 text-primary hover:text-primary/80 underline underline-offset-4"
                 href="https://buidlguidl.com/"
                 target="_blank"
                 rel="noreferrer"
               >
                 <BuidlGuidlLogo className="w-3 h-5 pb-1" />
-                <span className="link">BuidlGuidl</span>
+                <span>BuidlGuidl</span>
               </a>
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA" target="_blank" rel="noreferrer" className="link">
+              <a
+                href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary hover:text-primary/80 underline underline-offset-4"
+              >
                 Support
               </a>
             </div>
           </div>
-        </ul>
+        </nav>
       </div>
     </div>
   );

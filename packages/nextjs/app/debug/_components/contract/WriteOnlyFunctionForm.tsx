@@ -14,6 +14,8 @@ import {
   transformAbiFunction,
 } from "~~/app/debug/_components/contract";
 import { IntegerInput } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~~/components/ui/tooltip";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
@@ -68,7 +70,6 @@ export const WriteOnlyFunctionForm = ({
     setDisplayedTxResult(txResult);
   }, [txResult]);
 
-  // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const transformedFunction = transformAbiFunction(abiFunction);
   const inputs = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
@@ -117,17 +118,32 @@ export const WriteOnlyFunctionForm = ({
               {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
             </div>
           )}
-          <div
-            className={`flex ${
-              writeDisabled &&
-              "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-            }`}
-            data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
-          >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
-              {isPending && <span className="loading loading-spinner loading-xs"></span>}
-              Send 💸
-            </button>
+          <div className="flex">
+            {writeDisabled ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button variant="secondary" size="sm" disabled={true}>
+                        Send 💸
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Wallet not connected or in the wrong network</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Button variant="secondary" size="sm" disabled={isPending} onClick={handleWrite}>
+                {isPending && (
+                  <div className="mr-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                  </div>
+                )}
+                Send 💸
+              </Button>
+            )}
           </div>
         </div>
       </div>

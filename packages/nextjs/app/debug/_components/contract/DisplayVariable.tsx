@@ -7,8 +7,10 @@ import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { Button } from "~~/components/ui/button";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { cn } from "~~/lib/utils";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
 type DisplayVariableProps = {
@@ -60,21 +62,19 @@ export const DisplayVariable = ({
     <div className="space-y-1 pb-2">
       <div className="flex items-center">
         <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
-        <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
+        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={async () => await refetch()}>
           {isFetching ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current"></div>
           ) : (
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
-        </button>
+        </Button>
         <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
           <div
-            className={`break-all block transition bg-transparent ${
-              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
-            }`}
+            className={cn("break-all block transition", showAnimation && "bg-warning/20 rounded-sm animate-pulse-fast")}
           >
             {displayTxResult(result)}
           </div>

@@ -1,7 +1,11 @@
+"use client";
+
 import { ReactElement, useState } from "react";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress, isHex } from "viem";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
 import { Address } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~~/components/ui/tooltip";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 type DisplayContent =
@@ -34,7 +38,7 @@ export const displayTxResult = (
     }
 
     if (isHex(displayContent)) {
-      return displayContent; // don't add quotes
+      return displayContent;
     }
   }
 
@@ -60,14 +64,18 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   return (
     <div className="flex items-baseline">
       {isEther ? "Ξ" + formatEther(value) : String(value)}
-      <span
-        className="tooltip tooltip-secondary font-sans ml-2"
-        data-tip={isEther ? "Multiply by 1e18" : "Divide by 1e18"}
-      >
-        <button className="btn btn-ghost btn-circle btn-xs" onClick={() => setIsEther(!isEther)}>
-          <ArrowsRightLeftIcon className="h-3 w-3 opacity-65" />
-        </button>
-      </span>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="ml-2 h-6 w-6" onClick={() => setIsEther(!isEther)}>
+              <ArrowsRightLeftIcon className="h-3 w-3 opacity-65" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isEther ? "Multiply by 1e18" : "Divide by 1e18"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
@@ -105,7 +113,6 @@ const ArrayDisplay = ({ values, size }: { values: DisplayContent[]; size: Result
 const StructDisplay = ({ struct, size }: { struct: Record<string, any>; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col gap-y-1">
-      struct
       {Object.entries(struct).map(([k, v]) => (
         <ObjectFieldDisplay key={k} name={k} value={v} size={size} />
       ))}

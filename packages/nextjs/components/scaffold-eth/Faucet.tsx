@@ -6,6 +6,8 @@ import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~~/components/ui/dialog";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -25,6 +27,7 @@ export const Faucet = () => {
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const { chain: ConnectedChain } = useAccount();
 
@@ -40,11 +43,12 @@ export const Faucet = () => {
           <>
             <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
             <p className="m-0">
-              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
+              - Did you forget to run{" "}
+              <code className="italic bg-muted text-muted-foreground font-bold">yarn chain</code> ?
             </p>
             <p className="mt-1 break-normal">
-              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
-              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
+              - Or you can change <code className="italic bg-muted text-muted-foreground font-bold">targetNetwork</code>{" "}
+              in <code className="italic bg-muted text-muted-foreground font-bold">scaffold.config.ts</code>
             </p>
           </>,
         );
@@ -68,6 +72,7 @@ export const Faucet = () => {
       setLoading(false);
       setInputAddress(undefined);
       setSendValue("");
+      setIsOpen(false);
     } catch (error) {
       console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
       setLoading(false);
@@ -80,50 +85,46 @@ export const Faucet = () => {
   }
 
   return (
-    <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal gap-1">
-        <BanknotesIcon className="h-4 w-4" />
-        <span>Faucet</span>
-      </label>
-      <input type="checkbox" id="faucet-modal" className="modal-toggle" />
-      <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative">
-          {/* dummy input to capture event onclick on modal box */}
-          <input className="h-0 w-0 absolute top-0 left-0" />
-          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
-          <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
-            ✕
-          </label>
-          <div className="space-y-3">
-            <div className="flex space-x-4">
-              <div>
-                <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} onlyEnsOrAddress />
-              </div>
-              <div>
-                <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress} />
-              </div>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="default" size="sm" className="font-normal">
+          <BanknotesIcon className="h-4 w-4 mr-1" />
+          <span>Faucet</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Local Faucet</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="flex space-x-4">
+            <div>
+              <span className="text-sm font-bold">From:</span>
+              <Address address={faucetAddress} onlyEnsOrAddress />
             </div>
-            <div className="flex flex-col space-y-3">
-              <AddressInput
-                placeholder="Destination Address"
-                value={inputAddress ?? ""}
-                onChange={value => setInputAddress(value as AddressType)}
-              />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-                {!loading ? (
-                  <BanknotesIcon className="h-6 w-6" />
-                ) : (
-                  <span className="loading loading-spinner loading-sm"></span>
-                )}
-                <span>Send</span>
-              </button>
+            <div>
+              <span className="text-sm font-bold pl-3">Available:</span>
+              <Balance address={faucetAddress} />
             </div>
           </div>
-        </label>
-      </label>
-    </div>
+          <div className="flex flex-col space-y-3">
+            <AddressInput
+              placeholder="Destination Address"
+              value={inputAddress ?? ""}
+              onChange={value => setInputAddress(value as AddressType)}
+            />
+            <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
+            <Button variant="default" size="default" className="gap-2" onClick={sendETH} disabled={loading}>
+              {!loading ? (
+                <BanknotesIcon className="h-5 w-5" />
+              ) : (
+                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-current" />
+              )}
+              <span>Send</span>
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };

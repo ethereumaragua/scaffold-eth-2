@@ -8,7 +8,9 @@ import { PaginationButton } from "./PaginationButton";
 import { TransactionsTable } from "./TransactionsTable";
 import { createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
+import { Tabs, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
+import { cn } from "~~/lib/utils";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -51,26 +53,34 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
   return (
     <>
       {isContract && (
-        <div className="tabs tabs-lifted w-min">
-          <button
-            className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("transactions")}
-          >
-            Transactions
-          </button>
-          <button className={`tab ${activeTab === "code" ? "tab-active" : ""}`} onClick={() => setActiveTab("code")}>
-            Code
-          </button>
-          <button
-            className={`tab  ${activeTab === "storage" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("storage")}
-          >
-            Storage
-          </button>
-          <button className={`tab  ${activeTab === "logs" ? "tab-active" : ""}`} onClick={() => setActiveTab("logs")}>
-            Logs
-          </button>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="w-min">
+            <TabsTrigger
+              value="transactions"
+              className={cn("px-4 py-2 rounded-t-lg", activeTab === "transactions" && "bg-background text-foreground")}
+            >
+              Transactions
+            </TabsTrigger>
+            <TabsTrigger
+              value="code"
+              className={cn("px-4 py-2 rounded-t-lg", activeTab === "code" && "bg-background text-foreground")}
+            >
+              Code
+            </TabsTrigger>
+            <TabsTrigger
+              value="storage"
+              className={cn("px-4 py-2 rounded-t-lg", activeTab === "storage" && "bg-background text-foreground")}
+            >
+              Storage
+            </TabsTrigger>
+            <TabsTrigger
+              value="logs"
+              className={cn("px-4 py-2 rounded-t-lg", activeTab === "logs" && "bg-background text-foreground")}
+            >
+              Logs
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       )}
       {activeTab === "transactions" && (
         <div className="pt-4">

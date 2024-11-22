@@ -1,3 +1,6 @@
+import { Card, CardContent } from "~~/components/ui/card";
+import { ScrollArea } from "~~/components/ui/scroll-area";
+
 type AddressCodeTabProps = {
   bytecode: string;
   assembly: string;
@@ -10,18 +13,26 @@ export const AddressCodeTab = ({ bytecode, assembly }: AddressCodeTabProps) => {
 
   return (
     <div className="flex flex-col gap-3 p-4">
-      Bytecode
-      <div className="mockup-code -indent-5 overflow-y-auto max-h-[500px]">
-        <pre className="px-5">
-          <code className="whitespace-pre-wrap overflow-auto break-words">{bytecode}</code>
-        </pre>
-      </div>
-      Opcodes
-      <div className="mockup-code -indent-5 overflow-y-auto max-h-[500px]">
-        <pre className="px-5">
-          <code>{formattedAssembly}</code>
-        </pre>
-      </div>
+      <div className="text-lg font-medium">Bytecode</div>
+      <Card>
+        <CardContent className="p-0">
+          <ScrollArea className="h-[500px] w-full rounded-md border">
+            <div className="p-4 font-mono text-sm">
+              <code className="whitespace-pre-wrap break-words">{bytecode}</code>
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+      <div className="text-lg font-medium">Opcodes</div>
+      <Card>
+        <CardContent className="p-0">
+          <ScrollArea className="h-[500px] w-full rounded-md border">
+            <div className="p-4 font-mono text-sm">
+              <code>{formattedAssembly}</code>
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
     </div>
   );
 };

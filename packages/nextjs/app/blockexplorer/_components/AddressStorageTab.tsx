@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Address, createPublicClient, http, toHex } from "viem";
 import { hardhat } from "viem/chains";
+import { Card, CardContent } from "~~/components/ui/card";
+import { ScrollArea } from "~~/components/ui/scroll-area";
 
 const publicClient = createPublicClient({
   chain: hardhat,
@@ -44,15 +46,19 @@ export const AddressStorageTab = ({ address }: { address: Address }) => {
   return (
     <div className="flex flex-col gap-3 p-4">
       {storage.length > 0 ? (
-        <div className="mockup-code overflow-auto max-h-[500px]">
-          <pre className="px-5 whitespace-pre-wrap break-words">
-            {storage.map((data, i) => (
-              <div key={i}>
-                <strong>Storage Slot {i}:</strong> {data}
+        <Card>
+          <CardContent className="p-0">
+            <ScrollArea className="h-[500px] w-full rounded-md border">
+              <div className="p-4 font-mono text-sm">
+                {storage.map((data, i) => (
+                  <div key={i} className="py-1">
+                    <strong className="text-primary">Storage Slot {i}:</strong> {data}
+                  </div>
+                ))}
               </div>
-            ))}
-          </pre>
-        </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
       ) : (
         <div className="text-lg">This contract does not have any variables.</div>
       )}

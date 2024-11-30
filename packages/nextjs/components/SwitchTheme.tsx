@@ -23,7 +23,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
 
   return (
     <Button variant="outline" size="icon" onClick={handleToggle} className={className}>
-      {isDarkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}{" "}
+      {isDarkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

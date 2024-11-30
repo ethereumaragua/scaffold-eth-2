@@ -37,7 +37,7 @@ This version includes shadcn/ui components. Here's what you need to know:
 npx shadcn-ui@latest add [component-name]
 ```
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+![Debug Contracts tab](packages/nextjs/components/assets/scaffold-eth-shadcn.png)
 
 ## Requirements
 

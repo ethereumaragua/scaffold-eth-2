@@ -9,11 +9,33 @@
 
 ⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
 
+## ✨ Features
+
+All the powerful features of Scaffold-ETH 2, plus:
+- 🎨 **Premium UI Components**: Leveraging shadcn/ui's beautifully crafted, accessible components
+- 🌓 **Enhanced Theme Switching**: Sophisticated dark/light mode implementation
+- ♿ **Improved Accessibility**: Better ARIA support and keyboard navigation
+- 🎯 **Type-safe Components**: Fully typed component library for better developer experience
+- 🔧 **Easy Customization**: Tailwind CSS-based styling with shadcn/ui's theming system
+
+Plus all the standard SE-2 features:
 - ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
 - 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
 - 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+
+
+## Additional Setup for shadcn/ui
+
+This version includes shadcn/ui components. Here's what you need to know:
+
+1. Components are pre-configured and ready to use
+2. Themes are defined in `packages/nextjs/styles/globals.css`
+3. New shadcn/ui components can be added using:
+```bash
+npx shadcn-ui@latest add [component-name]
+```
 
 ![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
 
@@ -78,6 +100,7 @@ Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-st
 ## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
+For shadcn/ui documentation, visit [shadcn/ui docs](https://ui.shadcn.com).
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 

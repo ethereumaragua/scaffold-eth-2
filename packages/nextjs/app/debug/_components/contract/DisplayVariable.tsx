@@ -71,7 +71,7 @@ export const DisplayVariable = ({
         </Button>
         <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
-      <div className="text-gray-500 font-medium flex flex-col items-start">
+      <div className="text-base-content/80 flex flex-col items-start">
         <div>
           <div
             className={cn("break-all block transition", showAnimation && "bg-warning/20 rounded-sm animate-pulse-fast")}

@@ -22,6 +22,7 @@ export const BytesInput = ({ value, onChange, name, placeholder, disabled }: Com
           size="sm"
           className={cn("px-3 font-semibold text-xl", "hover:bg-transparent hover:text-primary")}
           onClick={convertStringToBytes}
+          type="button"
         >
           #
         </Button>
